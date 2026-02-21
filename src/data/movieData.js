@@ -1,61 +1,51 @@
 /**
  * Movie catalog: loaded from TMDB bulk export (1000+ movies).
  * To refresh: TMDB_API_KEY=your_key node scripts/fetch-tmdb-movies.js
+ *
+ * The 6 featured movies use local poster images but take title, description, and genre from the API (tmdbMovies).
  */
 import tmdbMovies from './tmdbMovies.json';
 
-// Optional: prepend a few featured cases with local posters (keep your custom F1, etc.)
-const localFeatured = [
-  {
-    id: 'f1',
-    title: 'F1',
-    description: "In the 1990s, Sonny Hayes was Formula 1's most promising driver until an accident on the track nearly ended his career. Thirty years later, the owner of a struggling Formula 1 team convinces Sonny to return to racing and become the best in the world.",
-    image: '/f1.jpg',
-    genre: 'drama',
-    difficulty: 'medium',
-  },
-  {
-    id: 'superman-local',
-    title: 'Superman',
-    description: 'New movie of Superman.',
-    image: '/supes.jpg',
-    genre: 'action',
-  },
-  {
-    id: 'interstellar-local',
-    title: 'Interstellar',
-    description: 'A sci-fi journey through space and time.',
-    image: '/interstellar.webp',
-    genre: 'sci-fi',
-  },
-  {
-    id: 'inception-local',
-    title: 'Inception',
-    description: "A mind-bending thriller where dreams are the battlefield.",
-    image: '/inception.jpg',
-    genre: 'sci-fi',
-    difficulty: 'hard',
-  },
-  {
-    id: 'oppenheimer-local',
-    title: 'Oppenheimer',
-    description: 'A powerful drama about the father of the atomic bomb.',
-    image: '/oppenheimer.jpg',
-    genre: 'drama',
-  },
-  {
-    id: 'hangover-local',
-    title: 'The Hangover',
-    description: 'Three groomsmen lose their soon-to-be-wed buddy during their Vegas bachelor party and must retrace their steps.',
-    image: '/hangover.jpg',
-    genre: 'comedy',
-  },
+// Featured movies: we keep these IDs and local poster paths, but use API data for title/description/genre
+const featuredLocalPosters = [
+  { title: 'F1', image: '/f1.jpg', id: 'f1', difficulty: 'medium' },
+  { title: 'Superman', image: '/supes.jpg', id: 'superman-local' },
+  { title: 'Interstellar', image: '/interstellar.webp', id: 'interstellar-local' },
+  { title: 'Inception', image: '/inception.jpg', id: 'inception-local', difficulty: 'hard' },
+  { title: 'Oppenheimer', image: '/oppenheimer.jpg', id: 'oppenheimer-local' },
+  { title: 'The Hangover', image: '/hangover.jpg', id: 'hangover-local' },
 ];
 
-// Avoid duplicate TMDB titles we're featuring locally (by title)
-const featuredTitles = new Set(localFeatured.map((m) => m.title));
-const fromTmdb = Array.isArray(tmdbMovies)
-  ? tmdbMovies.filter((m) => !featuredTitles.has(m.title))
-  : [];
+const tmdbList = Array.isArray(tmdbMovies) ? tmdbMovies : [];
 
-export const allCases = [...localFeatured, ...fromTmdb];
+function findInTmdb(title) {
+  const lower = title.toLowerCase();
+  return tmdbList.find((m) => m.title.toLowerCase() === lower);
+}
+
+// Merge featured entries: API data + local image (and optional difficulty)
+const featuredWithApiData = featuredLocalPosters.map((feat) => {
+  const fromApi = findInTmdb(feat.title);
+  if (fromApi) {
+    return {
+      ...fromApi,
+      id: feat.id,
+      image: feat.image,
+      ...(feat.difficulty && { difficulty: feat.difficulty }),
+    };
+  }
+  // Not in API (e.g. F1): keep minimal fallback with local image
+  return {
+    id: feat.id,
+    title: feat.title,
+    description: 'No overview available from the catalog.',
+    genre: 'drama',
+    image: feat.image,
+    ...(feat.difficulty && { difficulty: feat.difficulty }),
+  };
+});
+
+const featuredTitles = new Set(featuredWithApiData.map((m) => m.title));
+const fromTmdb = tmdbList.filter((m) => !featuredTitles.has(m.title));
+
+export const allCases = [...featuredWithApiData, ...fromTmdb];
