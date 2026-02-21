@@ -53,6 +53,8 @@ async function main() {
       const primaryGenre = genreIds.length ? genreMap[genreIds[0]] : 'drama';
       const overview = (m.overview || '').trim() || 'No overview available.';
       const posterPath = m.poster_path ? (m.poster_path.startsWith('/') ? m.poster_path : `/${m.poster_path}`) : null;
+      const releaseDate = m.release_date || '';
+      const year = releaseDate ? parseInt(releaseDate.slice(0, 4), 10) : null;
 
       movies.push({
         id: String(m.id),
@@ -60,6 +62,7 @@ async function main() {
         description: overview.slice(0, 500),
         genre: primaryGenre || 'drama',
         tmdbPosterPath: posterPath,
+        year,
       });
     }
 

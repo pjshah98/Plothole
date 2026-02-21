@@ -7,12 +7,21 @@ import { allCases } from '../data/movieData';
 const PER_PAGE = 24;
 const allGenres = ['', ...[...new Set(allCases.map((m) => m.genre).filter(Boolean))].sort()];
 
+const SORT_OPTIONS = [
+  { value: '', label: 'Default order' },
+  { value: 'a-z', label: 'A–Z' },
+  { value: 'z-a', label: 'Z–A' },
+  { value: 'year-desc', label: 'Year: newest first' },
+  { value: 'year-asc', label: 'Year: oldest first' },
+];
+
 const AllCases = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const pageFromUrl = Math.max(1, parseInt(searchParams.get('page') || '1', 10) || 1);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
+  const [selectedSort, setSelectedSort] = useState('');
   const [currentPage, setCurrentPage] = useState(pageFromUrl);
 
   useEffect(() => {
@@ -29,16 +38,47 @@ const AllCases = () => {
     });
   }, [searchTerm, selectedGenre]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredCases.length / PER_PAGE));
+  const sortedCases = useMemo(() => {
+    const list = [...filteredCases];
+    if (selectedSort === 'a-z') {
+      return list.sort((a, b) =>
+        (a.title || '').localeCompare(b.title || '', undefined, { sensitivity: 'base' })
+      );
+    }
+    if (selectedSort === 'z-a') {
+      return list.sort((a, b) =>
+        (b.title || '').localeCompare(a.title || '', undefined, { sensitivity: 'base' })
+      );
+    }
+    if (selectedSort === 'year-desc') {
+      return list.sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+    }
+    if (selectedSort === 'year-asc') {
+      return list.sort((a, b) => (a.year ?? 0) - (b.year ?? 0));
+    }
+    return filteredCases;
+  }, [filteredCases, selectedSort]);
+
+  const totalPages = Math.max(1, Math.ceil(sortedCases.length / PER_PAGE));
   const safePage = Math.min(currentPage, totalPages);
   const start = (safePage - 1) * PER_PAGE;
   const paginatedCases = useMemo(
-    () => filteredCases.slice(start, start + PER_PAGE),
-    [filteredCases, start]
+    () => sortedCases.slice(start, start + PER_PAGE),
+    [sortedCases, start]
   );
 
   const setSearchAndResetPage = (setter) => (value) => {
     setter(value);
+    setCurrentPage(1);
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev.toString());
+      next.set('page', '1');
+      return next;
+    });
+  };
+
+  const handleSortChange = (e) => {
+    setSelectedSort(e.target.value);
     setCurrentPage(1);
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev.toString());
@@ -58,7 +98,7 @@ const AllCases = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const showCount = filteredCases.length;
+  const showCount = sortedCases.length;
   const rangeStart = showCount === 0 ? 0 : start + 1;
   const rangeEnd = Math.min(start + PER_PAGE, showCount);
 
@@ -85,6 +125,18 @@ const AllCases = () => {
           {allGenres.filter(Boolean).map((g) => (
             <option key={g} value={g}>
               {formatGenre(g)}
+            </option>
+          ))}
+        </select>
+        <select
+          value={selectedSort}
+          onChange={handleSortChange}
+          className="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900/80 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-colors sm:w-44"
+          aria-label="Sort by"
+        >
+          {SORT_OPTIONS.map((opt) => (
+            <option key={opt.value || 'default'} value={opt.value}>
+              {opt.label}
             </option>
           ))}
         </select>

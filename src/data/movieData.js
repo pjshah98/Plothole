@@ -41,6 +41,7 @@ const featuredWithApiData = featuredLocalPosters.map((feat) => {
     description: 'No overview available from the catalog.',
     genre: 'drama',
     image: feat.image,
+    year: null,
     ...(feat.difficulty && { difficulty: feat.difficulty }),
   };
 });
