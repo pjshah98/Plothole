@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
   const { user, loading, logout } = useAuth();
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className="min-h-screen min-w-0 w-full max-w-[100vw] overflow-x-hidden bg-slate-950 text-slate-100 flex flex-col pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:ring-2 focus:ring-cyan-500 bg-slate-900 text-white font-medium"
