@@ -4,8 +4,8 @@ A community site for spotting plot holes in movies and TV. Browse cases, submit 
 
 ## Try it
 
-- **Live site** — If deployed, the link is in this repo's About → Website (or the deploy URL). No setup required.
-- **Run locally** — Clone the repo, then follow [Run locally](#run-locally) below. You'll need two terminals (API + frontend) for full features including login/signup.
+- **Live site** — If the frontend is deployed, the link is in this repo's About → Website. You can browse cases and the UI; **login and signup will not work** unless the API is also deployed (this repo only deploys the frontend by default).
+- **Run locally** — Clone the repo and follow [Run locally](#run-locally) below (two terminals: API + frontend). This gives the full experience, including login, signup, and authenticated features.
 
 ## Features
 
