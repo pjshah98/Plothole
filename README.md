@@ -2,6 +2,11 @@
 
 A community site for spotting plot holes in movies and TV. Browse cases, submit your findings, vote and comment on others’ investigations, and earn XP to climb the ranks.
 
+## Try it
+
+- **Live site** — If deployed, the link is in this repo's About → Website (or the deploy URL). No setup required.
+- **Run locally** — Clone the repo, then follow [Run locally](#run-locally) below. You'll need two terminals (API + frontend) for full features including login/signup.
+
 ## Features
 
 - **Browse cases** — Dozens of movies with search and genre filters
@@ -62,16 +67,6 @@ TMDB_API_KEY=your_key node scripts/fetch-tmdb-movies.js
 ```
 
 Six featured movies (F1, Superman, Interstellar, Inception, Oppenheimer, The Hangover) use your local posters and appear first; the rest come from the TMDB export with poster paths included.
-
-## Optional: TMDB posters (legacy)
-
-To use real movie posters from The Movie Database:
-
-1. Get a free API key at [themoviedb.org/settings/api](https://www.themoviedb.org/settings/api).
-2. Run: `TMDB_API_KEY=your_key node scripts/fetch-tmdb-posters.js`
-3. The script updates `src/data/tmdbPosters.json`; the app uses these automatically.
-
-See `docs/MOVIE_POSTERS.md` for details.
 
 ## Project structure
 
