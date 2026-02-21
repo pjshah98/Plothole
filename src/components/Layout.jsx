@@ -20,15 +20,15 @@ const Layout = ({ children }) => {
         Skip to main content
       </a>
       <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
-        <nav className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14 sm:h-16" aria-label="Main navigation">
+        <nav className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-2 min-h-14 sm:min-h-16 py-2 flex-wrap sm:flex-nowrap" aria-label="Main navigation">
           <Link
             to="/"
-            className="flex items-center gap-2 font-bold text-lg tracking-tight text-white hover:text-cyan-400 transition-colors"
+            className="flex items-center gap-2 font-bold text-lg tracking-tight text-white hover:text-cyan-400 transition-colors flex-shrink-0"
           >
             <span className="text-2xl" aria-hidden>🕳️</span>
             <span>Plothole</span>
           </Link>
-          <div className="flex items-center gap-1 sm:gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 min-w-0 flex-shrink flex-wrap justify-end">
             {navLinks.map(({ to, label }) => {
               const isActive = location.pathname === to || (to !== '/' && location.pathname.startsWith(to));
               return (
