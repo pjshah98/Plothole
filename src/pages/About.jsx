@@ -36,7 +36,7 @@ const About = () => {
         <section>
           <h2 className="font-display text-xl font-semibold text-white mt-8 mb-3">Posters</h2>
           <p className="text-slate-400">
-            Movie posters are provided by The Movie Database (TMDB). You can add more via our script — see <code className="px-1.5 py-0.5 rounded bg-slate-800 text-cyan-400 text-sm">docs/MOVIE_POSTERS.md</code>.
+            Movie posters are provided by <a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300">The Movie Database (TMDB)</a>.
           </p>
         </section>
       </div>

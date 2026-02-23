@@ -68,6 +68,8 @@ TMDB_API_KEY=your_key node scripts/fetch-tmdb-movies.js
 
 Six featured movies (F1, Superman, Interstellar, Inception, Oppenheimer, The Hangover) use your local posters and appear first; the rest come from the TMDB export with poster paths included.
 
+For optional poster fetching (TMDB API, legacy script), see [docs/MOVIE_POSTERS.md](docs/MOVIE_POSTERS.md).
+
 ## Project structure
 
 ```
