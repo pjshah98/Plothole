@@ -83,11 +83,6 @@ Six featured movies (F1, Superman, Interstellar, Inception, Oppenheimer, The Han
 └── docs/             # MOVIE_POSTERS.md
 ```
 
-## Environment
-
-- **Development:** No env vars required; API runs on port 3001, frontend on 5173 with proxy.
-- **Production:** Set `PORT` for the API; set `JWT_SECRET` for auth. For the frontend, ensure the API is reachable at `/api` or set the base URL in `src/api/auth.js`.
-
 ## License
 
 MIT
